@@ -19,7 +19,7 @@ export default function Hero() {
               programmers.
             </p>
             <div className="mt-6 flex flex-col md:flex-row md:space-x-4">
-              <Button asChild size={'lg'}>
+              <Button asChild size={'lg'} className={'shadow-lg'}>
                 <Link href={"/join"}>
                   Join Club
                 </Link>

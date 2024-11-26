@@ -1,5 +1,5 @@
 export default function Page() {
   return (
-    <div>Join</div>
-  )
+    <div>Dashboard</div>
+  );
 }

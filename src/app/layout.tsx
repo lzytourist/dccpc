@@ -2,8 +2,8 @@ import type {Metadata} from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ThemeProvider from "@/components/theme-provider";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import NextTopLoader from 'nextjs-toploader';
+import {Toaster} from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,15 +33,15 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
     <body
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
+    <NextTopLoader color={'#14345D'}/>
     <ThemeProvider
       attribute="class"
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
     >
-      <Header/>
       {children}
-      <Footer/>
+      <Toaster/>
     </ThemeProvider>
     </body>
     </html>
