@@ -1,8 +1,11 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/static/img/logo-cropped.png";
 import {Button} from "@/components/ui/button";
 import SideNav from "@/components/side-nav";
+import {Fade} from "react-awesome-reveal";
 
 const links = [
   {name: "Home", url: "/"},
@@ -27,12 +30,15 @@ export default function Header() {
           </Link>
 
           <nav className={'hidden md:flex'}>
-            {links.map((link, index) => (
-              <Link
-                href={link.url}
-                className={'ml-4 hover:text-primary/80 hover:drop-shadow-sm'}
-                key={index}>{link.name}</Link>
-            ))}
+            <Fade damping={0.1} cascade>
+              {links.map((link, index) => (
+                <Link
+                  href={link.url}
+                  className={'ml-4 hover:text-primary/80 hover:drop-shadow-sm'}
+                  key={index}>{link.name}</Link>
+              ))}
+            </Fade>
+
           </nav>
         </div>
         <Button asChild size={'lg'} className={'shadow-lg'}>

@@ -1,7 +1,10 @@
+'use client'
+
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import HeaderImage from "@/static/img/header.jpg";
+import {Fade} from "react-awesome-reveal";
 
 export default function Hero() {
   return (
@@ -18,13 +21,17 @@ export default function Hero() {
               skills, participate in contests, and connect with like-minded
               programmers.
             </p>
+
             <div className="mt-6 flex flex-col md:flex-row md:space-x-4">
-              <Button asChild size={'lg'} className={'shadow-lg'}>
-                <Link href={"/join"}>
-                  Join Club
-                </Link>
-              </Button>
+              <Fade direction={'up'}>
+                <Button asChild size={'lg'} className={'shadow-lg'}>
+                  <Link href={"/join"}>
+                    Join Club
+                  </Link>
+                </Button>
+              </Fade>
             </div>
+
           </div>
           <Image
             src={HeaderImage}
