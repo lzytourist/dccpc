@@ -1,6 +1,6 @@
 'use client'
 
-import {Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {
     Dialog,
     DialogContent,
@@ -15,7 +15,6 @@ import {useEffect, useState} from "react";
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
     PaginationLink, PaginationNext, PaginationPrevious
 } from "@/components/ui/pagination";
