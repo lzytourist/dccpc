@@ -11,15 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import {ViewIcon} from "lucide-react";
-import {useEffect, useState} from "react";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink, PaginationNext, PaginationPrevious
-} from "@/components/ui/pagination";
-import {useSearchParams} from "next/navigation";
+import {useState} from "react";
 import {DialogBody} from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
+import {formatDate} from "@/lib/utils";
+import Paginator from "@/components/paginator";
 
 interface Event {
     id: number;
@@ -33,17 +28,6 @@ interface Result {
     next: string | null;
     previous: string | null;
     results: Event[]
-}
-
-function formatDate(date: string) {
-    return Intl.DateTimeFormat("en-BD", {
-        year: "numeric",
-        month: "short",
-        day: "2-digit",
-        weekday: "short",
-        hour: "2-digit",
-        minute: "2-digit"
-    }).format(new Date(date));
 }
 
 function EventDetails({event}: { event: Event }) {
@@ -72,21 +56,16 @@ export default function Page() {
         next: null,
         results: []
     });
-    const [totalPage, setTotalPage] = useState<number>(1);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const params = useSearchParams();
 
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/club/events/?page=${params.get('page') ?? 1}`)
+    const getEvents = (page: number = 1) => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/club/events/?page=${page ?? 1}`)
             .then((res) => res.json())
             .then((data) => {
                 const res = data as Result;
                 setData(res);
-                setTotalPage(Math.floor((res.count + 14) / 15));
             })
             .catch((error) => console.log(error));
-        setCurrentPage(parseInt(params.get('page') ?? '1'));
-    }, [params]);
+    };
 
     return (
         <div className={'container mx-auto py-8 px-2 md:px-0'}>
@@ -116,25 +95,10 @@ export default function Page() {
                 </TableBody>
             </Table>
             <div>
-                <Pagination>
-                    <PaginationContent>
-                        {
-                            currentPage <= 1 ?
-                                <PaginationPrevious href="#"/> :
-                                <PaginationPrevious href={'?page=' + (currentPage - 1)}/>
-                        }
-                        {Array.from({length: totalPage}).map((_, i) => (
-                            <PaginationItem key={i}>
-                                <PaginationLink isActive={currentPage == i + 1} href={'?page=' + (i + 1)}>{i + 1}</PaginationLink>
-                            </PaginationItem>
-                        ))}
-                        {
-                            currentPage >= totalPage ?
-                                <PaginationNext href="#"/> :
-                                <PaginationNext href={'?page=' + currentPage + 1}/>
-                        }
-                    </PaginationContent>
-                </Pagination>
+                <Paginator
+                    callback={getEvents}
+                    dataCount={data.count}
+                    url={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/events/`}/>
             </div>
         </div>
     )

@@ -11,7 +11,7 @@ const links = [
   {name: "Home", url: "/"},
   {name: "Events", url: "/events"},
   {name: "Gallery", url: "/gallery"},
-  {name: "Panel", url: "/members"},
+  {name: "Panel", url: "/panel"},
   {name: "About", url: "/about"},
   {name: "Contact", url: "/contact"},
 ];
