@@ -47,7 +47,7 @@ export default function Page() {
                     driving our panel to success!</p>
 
                 <Fade direction={'up'} triggerOnce={true}>
-                    <div className={'my-6 grid grid-cols-1 grid-cols-4'}>
+                    <div className={'my-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4'}>
                         {
                             members.map((member, index) => (
                                 <ImageCard

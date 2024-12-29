@@ -25,7 +25,7 @@ export default function Page() {
                 <h1 className={'text-4xl md:text-5xl text-center mb-2'}>Gallery</h1>
 
                 <Fade direction={'up'} triggerOnce={true}>
-                    <div className={'grid grid-cols-1 grid-cols-4'}>
+                    <div className={'grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4'}>
                         {
                             images.map((image, index) => (
                                 <ImageCard
