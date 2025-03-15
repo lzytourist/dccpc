@@ -25,6 +25,16 @@ export const MembershipSchema = z.object({
   linkedin: z.string().nullable(),
   github: z.string().nullable(),
   transaction_id: z.string().nullable(),
+  image: z.any()
+      .refine((file) => file?.length > 0, "Image is required")
+      .refine(
+          (file) => file?.[0]?.size <= 2 * 1024 * 1024, // Limit to 2MB
+          "File size should be under 2MB"
+      )
+      .refine(
+          (file) => ["image/jpeg", "image/png"].includes(file?.[0]?.type),
+          "Only JPG and PNG are allowed"
+      ),
 });
 
 export const LoginSchema = z.object({
