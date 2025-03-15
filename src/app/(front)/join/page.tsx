@@ -57,13 +57,13 @@ export default function Page() {
         </Card>
       </div>
 
-      <div className={'my-8 bg-primary text-primary-foreground p-8 rounded-md shadow'}>
+      <div className={'my-8 p-8 rounded-md shadow'}>
         <h2 className={'text-3xl font-light'}>Fill-up this form to apply for membership.</h2>
         <MembershipForm/>
       </div>
 
-      <div className={'my-8'}>
-        <h2 className={'text-4xl font-light text-primary'}>FAQs</h2>
+      <div className={'my-8 bg-primary text-primary-foreground p-8 rounded-md shadow'}>
+        <h2 className={'text-4xl font-light'}>FAQs</h2>
         <FAQ/>
       </div>
     </div>

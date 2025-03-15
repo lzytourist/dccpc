@@ -57,13 +57,13 @@ export default function Page() {
                                     description={member.designation}>
                                     <CardFooter>
                                         <div className={'flex items-center gap-2'}>
-                                            <Link href={member.linkedin ?? '#'}>
+                                            <Link href={member.linkedin ?? '#'} target={'_blank'}>
                                                 <Linkedin/>
                                             </Link>
-                                            <Link href={member.github ?? '#'}>
+                                            <Link href={member.github ?? '#'} target={'_blank'}>
                                                 <GithubIcon/>
                                             </Link>
-                                            <Link href={member.facebook ?? '#'}>
+                                            <Link href={member.facebook ?? '#'} target={'_blank'}>
                                                 <Facebook/>
                                             </Link>
                                         </div>

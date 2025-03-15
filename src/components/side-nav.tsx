@@ -6,14 +6,14 @@ import {
   SheetTrigger
 } from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import {MenuIcon, type LucideIcon} from "lucide-react";
+import {MenuIcon} from "lucide-react";
 import Link from "next/link";
 
 interface Link {
   url: string;
   name: string;
-  icon?: LucideIcon,
-  isActive?: boolean
+  icon?: JSX.Element;
+  isActive?: boolean;
 }
 
 export default function SideNav({links}: { links: Link[] }) {
@@ -24,19 +24,19 @@ export default function SideNav({links}: { links: Link[] }) {
           <MenuIcon/>
         </Button>
       </SheetTrigger>
-      <SheetContent side={'left'}>
+      <SheetContent side={'left'} className={'bg-primary text-primary-foreground'}>
         <SheetHeader>
-          <SheetTitle>DCCPC</SheetTitle>
+          <SheetTitle className={'font-bold text-center text-2xl text-primary-foreground'}>DCC Programming Club</SheetTitle>
         </SheetHeader>
         <nav>
           {links.map((link, i) => (
             <SheetClose key={i} asChild>
               <Link
-                className={'block'}
+                className={'flex gap-x-8 py-4 group'}
                 href={link.url}
               >
-                {link.icon && <link.icon/>}
-                {link.name}
+                {link.icon ? link.icon : ''}
+                <span className={''}>{link.name}</span>
               </Link>
             </SheetClose>
           ))}

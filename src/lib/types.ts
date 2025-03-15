@@ -12,3 +12,11 @@ export interface Result {
     count: number;
     results: Image[];
 }
+
+export interface Notice {
+    id: number;
+    title: string;
+    details: string;
+    file: string;
+    created_at: string;
+}

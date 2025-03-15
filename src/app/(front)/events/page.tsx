@@ -1,25 +1,18 @@
 'use client'
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog";
+import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
-import {ViewIcon} from "lucide-react";
-import {useState} from "react";
-import {DialogBody} from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
+import {Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {formatDate} from "@/lib/utils";
-import Paginator from "@/components/paginator";
+import Link from "next/link";
+import {RefreshCw} from "lucide-react";
+import Image from "next/image";
 
 interface Event {
     id: number;
     title: string;
     details: string;
+    image: string;
     created_at: string;
 }
 
@@ -30,76 +23,71 @@ interface Result {
     results: Event[]
 }
 
-function EventDetails({event}: { event: Event }) {
-    return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button size={'icon'} variant={'secondary'}>
-                    <ViewIcon/>
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{event.title}</DialogTitle>
-                    <DialogDescription>{formatDate(event.created_at)}</DialogDescription>
-                    <DialogBody>{event.details}</DialogBody>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog>
-    )
-}
-
 export default function Page() {
-    const [data, setData] = useState<Result>({
-        count: 0,
-        previous: null,
-        next: null,
-        results: []
-    });
+    const [data, setData] = useState<Event[]>([]);
+    const [total, setTotal] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(false);
+    const pageSize = 15;
 
-    const getEvents = (page: number = 1) => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/club/events/?page=${page ?? 1}`)
-            .then((res) => res.json())
-            .then((data) => {
-                const res = data as Result;
-                setData(res);
-            })
-            .catch((error) => console.log(error));
-    };
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/club/events/?page=${page}`);
+
+            if (res.ok) {
+                const result = await res.json() as Result;
+
+                setData(result.results);
+                setTotal(result.count);
+            }
+        };
+
+        fetchData().finally(() => setLoading(false));
+    }, [page]);
 
     return (
         <div className={'container mx-auto py-8 px-2 md:px-0'}>
             <h1 className={'text-center text-4xl md:text-5xl mb-2'}>Events</h1>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>#</TableHead>
-                        <TableHead className={'text-center'}>Title</TableHead>
-                        <TableHead className={'text-right'}>Date</TableHead>
-                        <TableHead></TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {
-                        data.results && data.results.map((event, i) => (
-                            <TableRow key={i}>
-                                <TableCell>{event.id}</TableCell>
-                                <TableCell>{event.title}</TableCell>
-                                <TableCell className={'text-right'}>{formatDate(event.created_at)}</TableCell>
-                                <TableCell>
-                                    <EventDetails event={event}/>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
-                </TableBody>
-            </Table>
-            <div>
-                <Paginator
-                    callback={getEvents}
-                    dataCount={data.count}
-                    url={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/events/`}/>
-            </div>
+
+            {loading && <div className={'flex justify-center'}>
+                <RefreshCw className={'animate-spin'}/>
+            </div>}
+
+            {data.length ? <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'}>
+                {data.map((event, index) => (
+                    <Card key={index} className={'rounded-md'}>
+                        <Image
+                            src={event.image}
+                            width={1920}
+                            height={720}
+                            className={'rounded-t-md'}
+                            alt={event.title}/>
+                        <CardHeader>
+                            <p className={'text-sm text-gray-500'}>{formatDate(event.created_at)}</p>
+                            <CardTitle>{event.title}</CardTitle>
+                        </CardHeader>
+                        <CardFooter>
+                            <Button variant={'link'} asChild={true}>
+                                <Link href={`/events/${event.id}`}>
+                                    Read More...
+                                </Link>
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                ))}
+            </div> : <div className={'text-center text-gray-500'}>No events yet!</div>}
+
+            {(total > 0) && <div className="mt-2 flex items-center justify-end space-x-2 py-4">
+                <Button variant={'outline'} onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1}>
+                    Previous
+                </Button>
+                <span>Page {page} of {Math.ceil(total / pageSize)}</span>
+                <Button variant={'outline'} onClick={() => setPage((p) => (p < Math.ceil(total / pageSize) ? p + 1 : p))}
+                        disabled={page * pageSize >= total}>
+                    Next
+                </Button>
+            </div>}
         </div>
     )
 }
